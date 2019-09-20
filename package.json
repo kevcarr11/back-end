@@ -1,0 +1,33 @@
+{
+  "name": "restaurant-passport-backend",
+  "version": "1.0.0",
+  "description": "The API for Restauarant Pass, a Lambda School build week project.",
+  "main": "src/index.js",
+  "repository": "https://github.com/RestaurantPassport-BW/back-end.git",
+  "author": "Matt Hagner <web@matthagner.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "helmet": "^3.21.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.19.4",
+    "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.0",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.2",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "prod": "cross-env NODE_ENV=production node src/index.js",
+    "start": "node src/index.js",
+    "dev": "nodemon yarn start",
+    "test": "cross-env NODE_ENV=testing jest --watchAll",
+    "test:once": "cross-env NODE_ENV=testing jest"
+  }
+}
