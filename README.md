@@ -16,8 +16,7 @@ Expects an object with the following keys with the following constraints:
 | `firstName` | string | N/A |
 | `lastName` | string | N/A |
 | `city` | integer | Must reference the id of a city |
-| `email` | string | Must conform to a valid email. Must be unique to a single
-account |
+| `email` | string | Must conform to a valid email. Must be unique to a single account |
 | `password` | string | Must be 8 characters or longer, but less than 40. |
 
 Possible Status Codes
