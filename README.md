@@ -1,13 +1,15 @@
 # Restaurant Pass Backend
 ---
 
+* [Endpoints](#endpoints)
+
 ## Deployed Server
 
 The server is deployed to heroku at the url [https:\/\/mhagner-rest-pass.herokuapp.com/](https://mhagner-rest-pass.herokuapp.com/).
 
 ## Endpoints
 
-POST `/api/auth/register`
+### POST `/api/auth/register`
 
 Expects an object with the following keys with the following constraints:
 
@@ -21,8 +23,10 @@ Expects an object with the following keys with the following constraints:
 
 Possible Status Codes
 * 201 - Successfully created user
-* 400 - Bad request
-* 500 - Internal server error
+* 400 - Bad request (There will be a message field in the return type with more
+    information about the error)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
 
 On success the endpoint will return an object with a `token` inside. The token
 should be saved to local storage, and sent with all further requests in the
