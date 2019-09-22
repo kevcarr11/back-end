@@ -11,7 +11,7 @@ POST `/api/auth/register`
 
 Expects an object with the following keys with the following constraints:
 | Field | Type | Other Constraints |
-|-------|------|-------------------|
+| ---- | --- | --- |
 | `firstName` | string | N/A |
 | `lastName` | string | N/A |
 | `city` | integer | Must reference the id of a city |
