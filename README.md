@@ -10,6 +10,7 @@ The server is deployed to heroku at the url [https:\/\/mhagner-rest-pass.herokua
 POST `/api/auth/register`
 
 Expects an object with the following keys with the following constraints:
+
 | Field | Type | Other Constraints |
 | ---- | --- | --- |
 | `firstName` | string | N/A |
