@@ -22,6 +22,13 @@ const UserSchema = Yup.object({
     .required("Field `password` is required")
 });
 
+const LoginSchema = Yup.object({
+  email: Yup.string()
+    .email("Must be a valid email")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required")
+});
+
 async function validateUserRegistration(req, res, next) {
   try {
     // Yup will throw an error if any of the validations failed.
@@ -41,6 +48,24 @@ async function validateUserRegistration(req, res, next) {
     } else {
       next();
     }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+}
+
+async function validateLoginInput(req, res, next) {
+  const { email, password } = req.body;
+  if (!email && !password) {
+    res.status(400).json({
+      message: "Please provide an email and password"
+    });
+    return;
+  }
+
+  try {
+    await LoginSchema.validate(req.body);
+
+    next();
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -72,5 +97,23 @@ router.post(
     }
   }
 );
+
+router.post("/login", validateLoginInput, async (req, res) => {
+  try {
+    const user = await User.getByEmail(req.body.email);
+
+    if (user && bcrypt.compareSync(req.body.password, user.password)) {
+      const token = jwt.sign({ sub: user.id }, secret(), { expiresIn: "72h" });
+
+      res.status(200).json({ token });
+    } else {
+      res.status(401).json({
+        message: "Invalid login credentials"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 module.exports = router;

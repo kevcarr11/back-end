@@ -31,8 +31,8 @@
     "prod": "cross-env NODE_ENV=production node src/index.js",
     "start": "node src/index.js",
     "dev": "nodemon yarn start",
-    "test": "cross-env NODE_ENV=testing jest --watchAll",
-    "test:once": "cross-env NODE_ENV=testing jest",
+    "test": "yarn test:once --watchAll",
+    "test:once": "cross-env NODE_ENV=testing PW_SALT=10 jest",
     "up:all": "npx knex migrate:up && cross-env NODE_ENV=testing npx knex migrate:up",
     "down:all": "npx knex migrate:down && cross-env NODE_ENV=testing npx knex migrate:down"
   }
