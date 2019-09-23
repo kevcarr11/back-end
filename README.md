@@ -59,3 +59,45 @@ fetch('https://mhagner-rest-pass.herokuapp.com/api/auth/register', {
   });
 
 ```
+
+### POST `/api/auth/login`
+
+Expects an object with the following keys with the following constraints:
+
+| Field | Type | Other Constraints |
+| ---- | --- | --- |
+| `email` | string | Must conform to a valid email |
+| `password` | string | N/A |
+
+Possible Status Codes
+* 201 - Successfully logged in
+* 400 - Bad request (There will be a message field in the return type with more
+    information about the error)
+* 401 - Unauthorized (The username or password are incorrect)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
+
+```js
+
+// This example shows a what a successful login would look like
+// assuming that a user with an email `matthagner@example.com` exists
+// and their password is `anunsafepassword`.
+fetch('https://mhagner-rest-pass.herokuapp.com/api/auth/login', {
+  method: 'POST',
+  body: JSON.stringify({
+    email: 'matthagner@example.com',
+    password: 'anunsafepassword',
+  })
+})
+  .then(res => res.json())
+  .then(data => {
+    localStorage.setItem('token', JSON.stringify(data.token));
+
+    // This is where you could redirect the user on a succesful login
+    // ...
+  })
+  .catch(err => {
+    // This is where you would handle any errors
+  });
+
+```
