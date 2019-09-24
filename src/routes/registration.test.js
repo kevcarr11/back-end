@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const server = require("../server");
 const db = require("../db");
 
-beforeEach(async () => {
+afterEach(async () => {
   await db.from("users").truncate();
 });
 
@@ -47,7 +47,7 @@ describe("POST api/auth/register", () => {
       .post("/api/auth/register")
       .send(createUser());
 
-    const { token } = res.body;
+    const { token, user } = res.body;
 
     // We aren't concerned with whether or not the token is valid,
     // but instead just that it contains the information we expect
@@ -56,6 +56,8 @@ describe("POST api/auth/register", () => {
     const decoded = jwt.decode(token);
 
     expect(decoded.sub).toBe(1);
+    expect(user.firstName).toBe("Matt");
+    expect(user.lastName).toBe("Hagner");
   });
 
   it("it should validate the user input", async () => {
