@@ -51,9 +51,11 @@ describe("POST /api/auth/login", () => {
       .post(ENDPOINT)
       .send(defaultLogin);
 
-    const { token } = res.body;
+    const { token, user } = res.body;
     const decoded = jwt.decode(token);
     expect(decoded.sub).toBe(1);
+    expect(user.firstName).toBe("Matt");
+    expect(user.lastName).toBe("Hagner");
   });
 
   it("should validate user input", async () => {

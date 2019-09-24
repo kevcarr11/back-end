@@ -28,9 +28,16 @@ Possible Status Codes
 * 500 - Internal server error (You shouldn't be getting these. If you are, let
     me know because something isn't working as expected)
 
-On success the endpoint will return an object with a `token` inside. The token
+On success the endpoint will return an object with a `token`, and `user` inside. The token
 should be saved to local storage, and sent with all further requests in the
 request header as an `authorization`.
+
+The user will match the following shape
+
+| Key | Value type |
+| --- | --- |
+| `firstName` | string |
+| `lastName` | string |
 
 Example
 
@@ -76,6 +83,15 @@ Possible Status Codes
 * 401 - Unauthorized (The username or password are incorrect)
 * 500 - Internal server error (You shouldn't be getting these. If you are, let
     me know because something isn't working as expected)
+
+On success you a `token` and a `user` object will be returned. 
+
+The user will match the following shape.
+
+| Key | Value type |
+| --- | --- |
+| `firstName` | string |
+| `lastName` | string |
 
 ```js
 

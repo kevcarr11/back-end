@@ -90,7 +90,11 @@ router.post(
       const token = jwt.sign({ sub: user.id }, secret(), { expiresIn: "72h" });
 
       res.status(201).json({
-        token
+        token,
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName
+        }
       });
     } catch (err) {
       console.error(err);
@@ -105,7 +109,13 @@ router.post("/login", validateLoginInput, async (req, res) => {
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       const token = jwt.sign({ sub: user.id }, secret(), { expiresIn: "72h" });
 
-      res.status(200).json({ token });
+      res.status(200).json({
+        token,
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName
+        }
+      });
     } else {
       res.status(401).json({
         message: "Invalid login credentials"
