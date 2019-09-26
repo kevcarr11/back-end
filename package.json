@@ -34,6 +34,9 @@
     "test": "yarn test:once --watchAll",
     "test:once": "cross-env NODE_ENV=testing PW_SALT=10 jest",
     "up:all": "npx knex migrate:up && cross-env NODE_ENV=testing npx knex migrate:up",
-    "down:all": "npx knex migrate:down && cross-env NODE_ENV=testing npx knex migrate:down"
+    "down:all": "npx knex migrate:down && cross-env NODE_ENV=testing npx knex migrate:down",
+    "seed:dev": "knex seed:run",
+    "seed:test": "cross-env NODE_ENV=testing knex seed:run",
+    "seed:all": "yarn seed:dev && yarn seed:test"
   }
 }
