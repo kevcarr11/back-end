@@ -117,3 +117,80 @@ fetch('https://mhagner-rest-pass.herokuapp.com/api/auth/login', {
   });
 
 ```
+
+### GET `/api/users/restaurants`
+
+Possible Status Codes
+* 200 - Successfully and returns a list of restaurants 
+* 401 - Unauthorized (invalid token or not logged in)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
+
+On success an array of restaurants will be returned 
+
+```js
+fetch('https://mhagner-rest-pass.herokuapp.com/api/users/restaurants', {
+  headers: {
+    Authorization: token, // (this token could come from localStorage)
+  }
+})
+  .then(res => res.json())
+  .then(restaurants => {
+      // Use restaurants however you want or need
+  })
+  .catch(err => {
+    // This is where you would handle any errors
+  });
+
+```
+
+### GET `/api/users/visits`
+
+Possible Status Codes
+* 200 - Successfully and returns a list of restaurants 
+* 401 - Unauthorized (invalid token or not logged in)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
+
+On success an array of restaurants the user has visited
+
+```js
+fetch('https://mhagner-rest-pass.herokuapp.com/api/users/visits', {
+  headers: {
+    Authorization: token, // (this token could come from localStorage)
+  }
+})
+  .then(res => res.json())
+  .then(visits => {
+      // Use visits however you want or need
+  })
+  .catch(err => {
+    // This is where you would handle any errors
+  });
+```
+
+### POST `/api/users/visit/:restaurantId`
+
+Possible Status Codes
+* 200 - Successful 
+* 401 - Unauthorized (invalid token or not logged in)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
+
+On success an array of restaurants the user has visited
+
+```js
+fetch('https://mhagner-rest-pass.herokuapp.com/api/users/visit/1', {
+  headers: {
+    Authorization: token, // (this token could come from localStorage)
+  }
+})
+  .then(res => res.json())
+  .then(wasSuccessful => {
+      // Use restaurants however you want or need
+  })
+  .catch(err => {
+    // This is where you would handle any errors
+  });
+```
+
