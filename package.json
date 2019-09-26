@@ -37,6 +37,7 @@
     "seed:remote": "heroku run npx knex seed:run",
     "up:all": "npx knex migrate:up && cross-env NODE_ENV=testing npx knex migrate:up",
     "down:all": "npx knex migrate:down && cross-env NODE_ENV=testing npx knex migrate:down",
-    "seed:dev": "knex seed:run"
+    "seed:dev": "knex seed:run",
+    "migrate:make": "yarn knex migrate:make"
   }
 }

@@ -4,6 +4,7 @@ exports.up = function(knex) {
     categories.increments();
 
     categories.string('name').notNullable();
+    categories.string('image');
   });
 };
 
