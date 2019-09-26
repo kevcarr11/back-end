@@ -11,9 +11,21 @@ async function create(input) {
 
 const getByField = name => async val => {
   const [rest] = await db
-    .from("restaurants")
-    .select("*")
-    .where({ [name]: val });
+    .from("restaurants as r")
+    .innerJoin("categories as cat", "cat.id", "r.category")
+    .innerJoin("cities as c", "c.id", "r.city")
+    .select(
+      "r.name",
+      "r.id",
+      "phone",
+      "address",
+      "week",
+      "weekend",
+      "cat.name as category",
+      "c.name as city",
+      "cat.image as image"
+    )
+    .where({ [`r.${name}`]: val });
 
   return rest ? rest : null;
 };
@@ -22,8 +34,21 @@ const getById = getByField("id");
 const getByName = getByField("name");
 
 const getAll = async () => {
-  const restaurants = await db.from("restaurants").select("*");
-
+  const restaurants = await db
+    .from("restaurants as r")
+    .innerJoin("categories as cat", "cat.id", "r.category")
+    .innerJoin("cities as c", "c.id", "r.city")
+    .select(
+      "r.name",
+      "r.id",
+      "phone",
+      "address",
+      "week",
+      "weekend",
+      "cat.name as category",
+      "c.name as city",
+      "cat.image as image"
+    );
   return restaurants;
 };
 
