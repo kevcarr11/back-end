@@ -5,6 +5,10 @@ beforeEach(async () => {
   await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
 });
 
+afterEach(async () => {
+  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
+});
+
 it("should create a category", async () => {
   const input = {
     name: "New Category"
