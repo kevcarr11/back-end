@@ -71,11 +71,33 @@ async function updateById(id, update) {
   return restaurant ? restaurant : null;
 }
 
+async function getRestaurantsByCity(city) {
+  const restaurants = await db
+    .from("restaurants as r")
+    .where({ city: city })
+    .innerJoin("categories as cat", "cat.id", "r.category")
+    .innerJoin("cities as c", "c.id", "r.city")
+    .select(
+      "r.name",
+      "r.id",
+      "phone",
+      "address",
+      "week",
+      "weekend",
+      "cat.name as category",
+      "c.name as city",
+      "cat.image as image"
+    );
+
+  return restaurants;
+}
+
 module.exports = {
   create,
   getById,
   getByName,
   getAll,
   deleteById,
-  updateById
+  updateById,
+  getRestaurantsByCity
 };

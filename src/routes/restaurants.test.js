@@ -7,6 +7,10 @@ beforeEach(async () => {
   await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
 });
 
+afterEach(async () => {
+  await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
+});
+
 const createRest = rest => ({
   ...rest,
   name: "Whattaburger",

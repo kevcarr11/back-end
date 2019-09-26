@@ -17,13 +17,15 @@ const createUser = user => ({
 const defaultUser = createUser();
 
 beforeEach(async () => {
-  await db.from("users").truncate();
-
   await db
     .from("users")
     .insert(
       createUser({ password: bcrypt.hashSync(defaultUser.password, salt()) })
     );
+});
+
+afterEach(async () => {
+  await db.from("users").truncate();
 });
 
 const createLogin = login => ({

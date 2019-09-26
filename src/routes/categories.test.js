@@ -4,8 +4,6 @@ const db = require("../db");
 const admin = require("../admin");
 
 beforeEach(async () => {
-  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
-
   await db.from("categories").insert([
     {
       name: "Tex-Mex"
@@ -14,6 +12,10 @@ beforeEach(async () => {
       name: "Greek"
     }
   ]);
+});
+
+afterEach(async () => {
+  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
 });
 
 describe("GET /", () => {
