@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Users = require("../controllers/users");
 const Restaurants = require("../controllers/restaurants");
-const Passport = require('../controllers/passport');
+const Passport = require("../controllers/passport");
 const jwt = require("jsonwebtoken");
 const secret = require("../secret");
 
@@ -45,7 +45,7 @@ router.get("/restaurants", validateLoggedIn, async (req, res) => {
   }
 });
 
-router.get('/visits', validateLoggedIn, async (req, res) => {
+router.get("/visits", validateLoggedIn, async (req, res) => {
   try {
     const decoded = jwt.decode(req.headers.authorization);
 
@@ -60,6 +60,30 @@ router.get('/visits', validateLoggedIn, async (req, res) => {
       message: err.message
     });
   }
-})
+});
+
+router.post("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
+  try {
+    const decoded = jwt.decode(req.headers.authorization);
+
+    const success = await Passport.visit(decoded.sub, req.params.restaurantId);
+
+    if (success) {
+      res.status(201).json({
+        message: "Successfully visited"
+      });
+    } else {
+      res.status(500).json({
+        error: "Internal Server error",
+        message: err.message
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+      message: err.message
+    });
+  }
+});
 
 module.exports = router;
