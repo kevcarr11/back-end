@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Users = require("../controllers/users");
 const Restaurants = require("../controllers/restaurants");
+const Passport = require('../controllers/passport');
 const jwt = require("jsonwebtoken");
 const secret = require("../secret");
 
@@ -43,5 +44,22 @@ router.get("/restaurants", validateLoggedIn, async (req, res) => {
     });
   }
 });
+
+router.get('/visits', validateLoggedIn, async (req, res) => {
+  try {
+    const decoded = jwt.decode(req.headers.authorization);
+
+    const visits = await Passport.getAllVisitsForUser(decoded.sub);
+
+    res.status(200).json({
+      visits
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+      message: err.message
+    });
+  }
+})
 
 module.exports = router;
