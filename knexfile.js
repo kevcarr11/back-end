@@ -1,4 +1,5 @@
 // Update with your config settings.
+require('dotenv').config();
 
 module.exports = {
   development: {
@@ -12,7 +13,10 @@ module.exports = {
     },
     migrations: {
       directory: __dirname + '/db/migrations',
-    }
+    },
+    seeds: {
+      directory: __dirname + '/db/seeds',
+    },
   },
   production: {
     client: 'pg',
@@ -33,6 +37,9 @@ module.exports = {
     },
     migrations: {
       directory: __dirname + '/db/migrations',
-    }
+    },
+    seeds: {
+      directory: __dirname + '/db/seeds',
+    },
   }
 };
