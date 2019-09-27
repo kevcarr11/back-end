@@ -17,6 +17,10 @@ const createUser = user => ({
 const defaultUser = createUser();
 
 beforeEach(async () => {
+  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  await db.from("cities").insert({ name: "Austin" });
+
   await db
     .from("users")
     .insert(
@@ -25,7 +29,8 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  await db.from("users").truncate();
+  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
 });
 
 const createLogin = login => ({

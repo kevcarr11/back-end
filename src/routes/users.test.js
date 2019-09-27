@@ -47,29 +47,33 @@ afterEach(async () => {
 
 describe("GET /api/users/restaurants", () => {
   it("should return only the restaurants from the users city", async () => {
-    await db.from("cities").insert({ name: "Austin" });
-    await db.from("cities").insert({ name: "Memphis" });
-    await db.from("categories").insert({ name: "Tex-Mex", image: "yay" });
+    try {
+      await db.from("cities").insert({ name: "Austin" });
+      await db.from("cities").insert({ name: "Memphis" });
+      await db.from("categories").insert({ name: "Tex-Mex", image: "yay" });
 
-    await db.from("restaurants").insert(defaultRest);
-    await db.from("restaurants").insert(createRest({ city: 2 }));
+      await db.from("restaurants").insert(defaultRest);
+      await db.from("restaurants").insert(createRest({ city: 2 }));
 
-    await db.from("users").insert(
-      createUser({
-        password: bcrypt.hashSync(defaultUser.password, salt())
-      })
-    );
+      await db.from("users").insert(
+        createUser({
+          password: bcrypt.hashSync(defaultUser.password, salt())
+        })
+      );
 
-    const res = await request(server)
-      .post("/api/auth/login")
-      .send(defaultLogin);
+      const res = await request(server)
+        .post("/api/auth/login")
+        .send(defaultLogin);
 
-    const { token } = res.body;
+      const { token } = res.body;
 
-    const res2 = await request(server)
-      .get("/api/users/restaurants")
-      .set("Authorization", token);
+      const res2 = await request(server)
+        .get("/api/users/restaurants")
+        .set("Authorization", token);
 
-    expect(res2.body.restaurants.length).toBe(1);
+      expect(res2.body.restaurants.length).toBe(1);
+    } catch (err) {
+      console.error(err);
+    }
   });
 });
