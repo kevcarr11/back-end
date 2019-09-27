@@ -1,4 +1,4 @@
-# Restaurant Pass Backend
+# Restaurant Passport Backend
 ---
 
 * [Endpoints](#endpoints)
@@ -219,3 +219,16 @@ fetch('https://mhagner-rest-pass.herokuapp.com/api/users/visit/1', {
   });
 ```
 
+---
+
+## Setting up the project locally
+
+1. `git clone https://github.com/RestaurantPassport-BW/back-end.git`
+2. `cd back-end`
+3. `yarn install`
+4. `cp example.env .env`
+5. Set up a test and development postgres database ( `createdb <database>` )
+6. Update the data in your `.env` file
+7. `yarn up:latest`
+8. `yarn seed:all`
+9. Enjoy
