@@ -1,5 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("passport", tbl => {
+    tbl.increments();
     tbl
       .integer("user_id")
       .unsigned()
@@ -14,7 +15,7 @@ exports.up = function(knex) {
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable('restaurants')
+      .inTable("restaurants")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
   });

@@ -9,13 +9,22 @@ async function visit(user_id, restaurant_id) {
   return visit ? true : false;
 }
 
-async function removeVisit(user_id, restaurant_id) {
+async function removeVisit(id) {
   const count = await db
     .from("passport")
-    .where({ user_id, restaurant_id })
+    .where({ id })
     .del();
 
   return count === 1;
+}
+
+async function getVisitById(user_id, restaurant_id) {
+  const [visit] = await db
+    .from("passport")
+    .where({ user_id, restaurant_id })
+    .select("*");
+
+  return visit ? true : false;
 }
 
 async function getAllVisitsForUser(user_id) {
@@ -26,6 +35,7 @@ async function getAllVisitsForUser(user_id) {
     .innerJoin("categories as cat", "cat.id", "r.category")
     .select(
       "r.name",
+      "p.id as passport_id",
       "r.id",
       "r.phone",
       "r.address",
@@ -43,5 +53,6 @@ async function getAllVisitsForUser(user_id) {
 module.exports = {
   visit,
   removeVisit,
-  getAllVisitsForUser
+  getAllVisitsForUser,
+  getVisitById
 };

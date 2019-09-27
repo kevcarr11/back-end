@@ -65,11 +65,21 @@ router.get("/visits", validateLoggedIn, async (req, res) => {
   }
 });
 
-router.post("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
+router.post("/visit/:id", validateLoggedIn, async (req, res) => {
   try {
     const decoded = jwt.decode(req.headers.authorization);
 
-    const success = await Passport.visit(decoded.sub, req.params.restaurantId);
+    const hasVisited = await Passport.getVisitById(decoded.sub, req.params.id);
+
+    if (hasVisited) {
+      res.status(400).json({
+        message: "User has already visited"
+      });
+
+      return;
+    }
+
+    const success = await Passport.visit(decoded.sub, req.params.id);
 
     if (success) {
       res.status(201).json({
@@ -89,14 +99,9 @@ router.post("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
   }
 });
 
-router.delete("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
+router.delete("/visit/:id", validateLoggedIn, async (req, res) => {
   try {
-    const decoded = jwt.decode(req.headers.authorization);
-
-    const success = await Passport.removeVisit(
-      decoded.sub,
-      req.params.restaurantId
-    );
+    const success = await Passport.removeVisit(req.params.id);
 
     if (success) {
       res.status(200).json({
