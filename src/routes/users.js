@@ -101,7 +101,8 @@ router.post("/visit/:id", validateLoggedIn, async (req, res) => {
 
 router.delete("/visit/:id", validateLoggedIn, async (req, res) => {
   try {
-    const success = await Passport.removeVisit(req.params.id);
+    const decoded = jwt.decode(req.headers.authorization);
+    const success = await Passport.removeVisit(decoded.sub, req.params.id);
 
     if (success) {
       res.status(200).json({
