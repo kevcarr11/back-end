@@ -193,4 +193,29 @@ fetch('https://mhagner-rest-pass.herokuapp.com/api/users/visit/1', {
     // This is where you would handle any errors
   });
 ```
+### DELETE `/api/users/visit/:restaurantId`
+
+Possible Status Codes
+* 200 - Successful 
+* 401 - Unauthorized (invalid token or not logged in)
+* 500 - Internal server error (You shouldn't be getting these. If you are, let
+    me know because something isn't working as expected)
+
+On success an array of restaurants the user has visited
+
+```js
+fetch('https://mhagner-rest-pass.herokuapp.com/api/users/visit/1', {
+  method: "DELETE",
+  headers: {
+    Authorization: token, // (this token could come from localStorage)
+  }
+})
+  .then(res => res.json())
+  .then(wasSuccessful => {
+      // Use restaurants however you want or need
+  })
+  .catch(err => {
+    // This is where you would handle any errors
+  });
+```
 
