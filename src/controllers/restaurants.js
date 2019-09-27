@@ -71,7 +71,7 @@ async function updateById(id, update) {
   return restaurant ? restaurant : null;
 }
 
-async function getRestaurantsByCity(city) {
+async function getRestaurantsByCity(city, user_id) {
   const restaurants = await db
     .from("restaurants as r")
     .where({ city: city })
@@ -89,7 +89,22 @@ async function getRestaurantsByCity(city) {
       "cat.image as image"
     );
 
-  return restaurants;
+  const passport = await db
+    .from("passport")
+    .select("*")
+    .where({ user_id });
+
+  const fin = restaurants.reduce((fin, el) => {
+    if (passport.find(p => p.restaurant_id === el.id)) {
+      el.visited = true;
+    } else {
+      el.visited = false;
+    }
+
+    return [...fin, el];
+  }, []);
+
+  return fin;
 }
 
 module.exports = {

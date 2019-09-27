@@ -32,7 +32,10 @@ router.get("/restaurants", validateLoggedIn, async (req, res) => {
 
     const user = await Users.getById(decoded.sub);
 
-    const restaurants = await Restaurants.getRestaurantsByCity(user.city);
+    const restaurants = await Restaurants.getRestaurantsByCity(
+      user.city,
+      decoded.sub
+    );
 
     res.status(200).json({
       restaurants

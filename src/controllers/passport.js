@@ -26,6 +26,7 @@ async function getAllVisitsForUser(user_id) {
     .innerJoin("categories as cat", "cat.id", "r.category")
     .select(
       "r.name",
+      "r.id",
       "r.phone",
       "r.address",
       "r.week",
