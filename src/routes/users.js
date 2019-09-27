@@ -86,4 +86,31 @@ router.post("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
   }
 });
 
+router.delete("/visit/:restaurantId", validateLoggedIn, async (req, res) => {
+  try {
+    const decoded = jwt.decode(req.headers.authorization);
+
+    const success = await Passport.removeVisit(
+      decoded.sub,
+      req.params.restaurantId
+    );
+
+    if (success) {
+      res.status(200).json({
+        message: "Successfully deleted visit"
+      });
+    } else {
+      res.status(500).json({
+        error: "Internal Server error",
+        message: err.message
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+      message: err.message
+    });
+  }
+});
+
 module.exports = router;
