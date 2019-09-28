@@ -6,18 +6,26 @@ const db = require("../db");
 const salt = require("../salt");
 
 beforeAll(async () => {
-  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
-  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  try {
+    await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
+    await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 afterEach(async () => {
-  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
-  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  try {
+    await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
+    await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  } catch (err) {
+    console.error(err);
+  }
 });
 
-afterAll(async () => {
-  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
-});
+// afterAll(async () => {
+//   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+// });
 
 const createUser = user => ({
   firstName: "Matt",
@@ -31,13 +39,17 @@ const createUser = user => ({
 const defaultUser = createUser();
 
 beforeEach(async () => {
-  await db.from("cities").insert({ name: "Austin" });
+  try {
+    await db.from("cities").insert({ name: "Austin" });
 
-  await db
-    .from("users")
-    .insert(
-      createUser({ password: bcrypt.hashSync(defaultUser.password, salt()) })
-    );
+    await db
+      .from("users")
+      .insert(
+        createUser({ password: bcrypt.hashSync(defaultUser.password, salt()) })
+      );
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 const createLogin = login => ({
@@ -57,25 +69,34 @@ describe("POST /api/auth/login", () => {
   const ENDPOINT = "/api/auth/login";
 
   it("should return a status of 200 if successful", async done => {
-    const res = await request(server)
-      .post(ENDPOINT)
-      .send(defaultLogin);
+    try {
+      const res = await request(server)
+        .post(ENDPOINT)
+        .send(defaultLogin);
 
-    expect(res.status).toBe(200);
-    done();
+      expect(res.status).toBe(200);
+      done();
+    } catch (err) {
+      console.error(err);
+      done();
+    }
   });
 
   it("should return a jwt with the user token", async done => {
-    const res = await request(server)
-      .post(ENDPOINT)
-      .send(defaultLogin);
+    try {
+      const res = await request(server)
+        .post(ENDPOINT)
+        .send(defaultLogin);
 
-    const { token, user } = res.body;
-    const decoded = jwt.decode(token);
-    expect(decoded.sub).toBe(1);
-    expect(user.firstName).toBe("Matt");
-    expect(user.lastName).toBe("Hagner");
-    done();
+      const { token, user } = res.body;
+      const decoded = jwt.decode(token);
+      expect(decoded.sub).toBe(1);
+      expect(user.firstName).toBe("Matt");
+      expect(user.lastName).toBe("Hagner");
+      done();
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   it("should validate user input", async done => {
@@ -101,13 +122,18 @@ describe("POST /api/auth/login", () => {
   });
 
   it("should return a 401 when the user login info is incorrect", async done => {
-    const res = await request(server)
-      .post(ENDPOINT)
-      .send(badLogin);
+    try {
+      const res = await request(server)
+        .post(ENDPOINT)
+        .send(badLogin);
 
-    expect(res.status).toBe(401);
-    expect(res.body.message).toBe("Invalid login credentials");
-    done();
+      expect(res.status).toBe(401);
+      expect(res.body.message).toBe("Invalid login credentials");
+      done();
+    } catch (err) {
+      console.error(err);
+      done();
+    }
   });
 });
 
