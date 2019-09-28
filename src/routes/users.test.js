@@ -4,6 +4,17 @@ const bcrypt = require("bcryptjs");
 const db = require("../db");
 const salt = require("../salt");
 
+beforeAll(async () => {
+  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
+});
+
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+});
+
 const createRest = rest => {
   return {
     name: "Whattaburger",
@@ -38,15 +49,8 @@ const createLogin = login => ({
 
 const defaultLogin = createLogin();
 
-afterEach(async () => {
-  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
-  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
-  await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
-  await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
-});
-
 describe("GET /api/users/restaurants", () => {
-  it("should return only the restaurants from the users city", async () => {
+  it("should return only the restaurants from the users city", async done => {
     try {
       await db.from("cities").insert({ name: "Austin" });
       await db.from("cities").insert({ name: "Memphis" });
@@ -72,8 +76,11 @@ describe("GET /api/users/restaurants", () => {
         .set("Authorization", token);
 
       expect(res2.body.restaurants.length).toBe(1);
+
+      done();
     } catch (err) {
       console.error(err);
+      done();
     }
   });
 });

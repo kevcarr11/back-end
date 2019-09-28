@@ -28,14 +28,6 @@ const createUser = user => ({
 
 const defaultUser = createUser();
 
-// const createLogin = login => ({
-//   email: defaultUser.email,
-//   password: "abadpassword",
-//   ...login
-// });
-
-// const defaultLogin = createLogin();
-
 beforeEach(async () => {
   await db.raw('TRUNCATE "passport" RESTART IDENTITY CASCADE;');
   await db.raw('TRUNCATE "users" RESTART IDENTITY CASCADE;');
@@ -51,8 +43,12 @@ beforeEach(async () => {
   await db.from("users").insert(defaultUser);
 });
 
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+});
+
 describe("passport", () => {
-  it("should allow user to visit", async () => {
+  it("should allow user to visit", async done => {
     const visited = await Passport.visit(1, 1);
 
     const visits = await db
@@ -62,9 +58,10 @@ describe("passport", () => {
 
     expect(visited).toBe(true);
     expect(visits.length).toBe(1);
+    done();
   });
 
-  it("should allow a user to remove the visit", async () => {
+  it("should allow a user to remove the visit", async done => {
     await db.from("passport").insert({ user_id: 1, restaurant_id: 1 });
 
     const didDelete = await Passport.removeVisit(1, 1);
@@ -76,9 +73,10 @@ describe("passport", () => {
 
     expect(didDelete).toBe(true);
     expect(visits.length).toBe(0);
+    done();
   });
 
-  it("should get all visits for a user", async () => {
+  it("should get all visits for a user", async done => {
     await db.from("restaurants").insert(createRest({ name: "blah" }));
     await db.from("passport").insert({ user_id: 1, restaurant_id: 1 });
     await db.from("passport").insert({ user_id: 1, restaurant_id: 2 });
@@ -86,5 +84,6 @@ describe("passport", () => {
     const allVisits = await Passport.getAllVisitsForUser(1);
 
     expect(allVisits.length).toBe(2);
+    done();
   });
 });

@@ -3,12 +3,23 @@ const server = require("../server");
 const db = require("../db");
 const admin = require("../admin");
 
-beforeEach(async () => {
+beforeAll(async () => {
   await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "cities" RESTART IDENTITY CASCADE;');
+  await db.raw('TRUNCATE "categories" RESTART IDENTITY CASCADE;');
+});
+
+beforeEach(async () => {
+  await db.from("cities").insert({ name: "Austin" });
+  await db.from("categories").insert({ name: "Burgers", image: "fake" });
 });
 
 afterEach(async () => {
   await db.raw('TRUNCATE "restaurants" RESTART IDENTITY CASCADE;');
+});
+
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
 });
 
 const createRest = rest => ({
@@ -25,7 +36,7 @@ const createRest = rest => ({
 const defaultRest = createRest();
 
 describe("POST /", () => {
-  it("should create if admin", async () => {
+  it("should create if admin", async done => {
     const res = await request(server)
       .post("/api/restaurants")
       .send(defaultRest)
@@ -36,11 +47,12 @@ describe("POST /", () => {
     expect(rests.length).toBe(1);
     expect(res.status).toBe(201);
     expect(res.body.restaurant.name).toBe(defaultRest.name);
+    done();
   });
 });
 
 describe("GET /", () => {
-  it("should get all restaurants", async () => {
+  it("should get all restaurants", async done => {
     await request(server)
       .post("/api/restaurants")
       .send(createRest())
@@ -53,5 +65,6 @@ describe("GET /", () => {
     const res = await request(server).get("/api/restaurants");
 
     expect(res.body.restaurants.length).toBe(2);
+    done();
   });
 });
