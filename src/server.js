@@ -12,6 +12,11 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
+server.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 server.use("/api/auth", authRouter);
 server.use("/api/categories", categoriesRouter);
 server.use("/api/restaurants", restaurantsRouter);
